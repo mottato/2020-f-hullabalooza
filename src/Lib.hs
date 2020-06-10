@@ -32,12 +32,11 @@ nuevoEstadoDeAnimo :: (EstadoAnimo->EstadoAnimo)->Festival->Festival
 nuevoEstadoDeAnimo unaFuncion unFestival = Festival {
     estadoAnimo = unaFuncion.estadoAnimo $unFestival
 }
+efectoMetal :: EstadoAnimo->Festival->Festival
+efectoMetal unEstadoAnimo =aumentarPublicoMetal. nuevoEstadoDeAnimo (\[animo]-> [animo] ++  unEstadoAnimo)
 
 cumpleEstadoAnimo :: EstadoAnimo->Festival->Bool
 cumpleEstadoAnimo unEstadoAnimo = (==unEstadoAnimo).estadoAnimo
-
-efectoMetal :: EstadoAnimo->Festival->Festival
-efectoMetal unEstadoAnimo =aumentarPublicoMetal. nuevoEstadoDeAnimo (\[animo]-> [animo] ++  unEstadoAnimo)
 
 aumentarPublicoMetal :: Festival->Festival
 aumentarPublicoMetal = modificarCantidadPublico (\cantidad->cantidad+(1*cantidad `div` 100))
@@ -51,14 +50,27 @@ pop unFestival
  |cumpleEstadoAnimo "indiferente" unFestival= modificarCantidadPublico (*2).nuevoEstadoDeAnimo (\estado->"euforico") $unFestival
  | otherwise = unFestival
 
-metal :: String->EstadoAnimo->Genero
-metal "heavy metal" "pesado" unFestival = efectoMetal "pesado" unFestival
-metal "trash metal" "basura" unFestival = efectoMetal "basura" unFestival
-metal _ unEstadoAnimo unFestival = efectoMetal unEstadoAnimo unFestival
+
+type Metal = Genero
+heavyMetal :: Metal
+heavyMetal = efectoMetal "pesado" 
+
+trashMetal :: Metal
+trashMetal = efectoMetal "basura"
+
+subgeneroMetal :: EstadoAnimo->Metal
+subgeneroMetal unEstadoAnimo = aumentarPublicoMetal.nuevoEstadoDeAnimo(\[animo]-> [animo] ++ unEstadoAnimo)
+
 
 --Modelado
 hullabalooza = Festival "Springfield" 20000 "indiferente" [losRedondos,metallica,soda]
 losRedondos = Banda ["legendaria","pogosa"] 45 rockNacional
 soda = Banda ["irrepetible"] 40 rockNacional
 miranda = Banda ["insipida", "incolora", "inodora"] 60 pop
-metallica = Banda ["legendaria", "vendida"] 60 (metal "heavy metal" "pesado")
+metallica = Banda ["legendaria", "vendida"] 60 heavyMetal
+
+tocar :: Banda->Festival->Festival
+tocar unaBanda unFestival = (genero unaBanda) unFestival
+
+
+
