@@ -33,7 +33,16 @@ nuevoEstadoDeAnimo unaFuncion unFestival = Festival {
     estadoAnimo = unaFuncion.estadoAnimo $unFestival
 }
 
+cumpleEstadoAnimo :: EstadoAnimo->Festival->Bool
+cumpleEstadoAnimo unEstadoAnimo = (==unEstadoAnimo).estadoAnimo
 
+efectoMetal :: EstadoAnimo->Festival->Festival
+efectoMetal unEstadoAnimo =aumentarPublicoMetal. nuevoEstadoDeAnimo (\[animo]-> [animo] ++  unEstadoAnimo)
+
+aumentarPublicoMetal :: Festival->Festival
+aumentarPublicoMetal = modificarCantidadPublico (\cantidad->cantidad+(1*cantidad `div` 100))
+
+--Generos
 rockNacional :: Genero
 rockNacional = modificarCantidadPublico(+100)
 
@@ -42,25 +51,14 @@ pop unFestival
  |cumpleEstadoAnimo "indiferente" unFestival= modificarCantidadPublico (*2).nuevoEstadoDeAnimo (\estado->"euforico") $unFestival
  | otherwise = unFestival
 
-cumpleEstadoAnimo :: EstadoAnimo->Festival->Bool
-cumpleEstadoAnimo unEstadoAnimo = (==unEstadoAnimo).estadoAnimo
+metal :: String->EstadoAnimo->Genero
+metal "heavy metal" "pesado" unFestival = efectoMetal "pesado" unFestival
+metal "trash metal" "basura" unFestival = efectoMetal "basura" unFestival
+metal _ unEstadoAnimo unFestival = efectoMetal unEstadoAnimo unFestival
 
-type Metal = Genero
-heavyMetal :: Metal
-heavyMetal = aumentarPublicoMetal. nuevoEstadoDeAnimo (\[animo]-> [animo] ++ "pesado") 
-
-trashMetal :: Metal
-trashMetal = aumentarPublicoMetal.nuevoEstadoDeAnimo (\[animo]-> [animo] ++ "basura")
-
-subgeneroMetal :: EstadoAnimo->Genero
-subgeneroMetal unEstadoAnimo = aumentarPublicoMetal.nuevoEstadoDeAnimo(\[animo]-> [animo] ++ unEstadoAnimo)
-
-aumentarPublicoMetal :: Festival->Festival
-aumentarPublicoMetal = modificarCantidadPublico (\cantidad->cantidad+(1*cantidad `div` 100))
-
-
+--Modelado
 hullabalooza = Festival "Springfield" 20000 "indiferente" [losRedondos,metallica,soda]
 losRedondos = Banda ["legendaria","pogosa"] 45 rockNacional
 soda = Banda ["irrepetible"] 40 rockNacional
 miranda = Banda ["insipida", "incolora", "inodora"] 60 pop
-metallica = Banda ["legendaria", "vendida"] 60 (heavyMetal)
+metallica = Banda ["legendaria", "vendida"] 60 (metal "heavy metal" "pesado")
