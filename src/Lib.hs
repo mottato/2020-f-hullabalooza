@@ -110,4 +110,10 @@ criterioAcustica = tocaTantosDecibeles 55
 criterioLegendaria :: Criterio 
 criterioLegendaria unaBanda = tieneComoDescripcion "legendaria" unaBanda && tocaTantosDecibeles 40 unaBanda
 
---5)
+--6)
+type Puntos=Int
+popularidad :: Banda->[Criterio]->Puntos
+popularidad unaBanda  = (*100).length.(criteriosQueCumple unaBanda)
+
+criteriosQueCumple :: Banda->[Criterio]->[Criterio]
+criteriosQueCumple unaBanda criterios = filter (\criterio->criterio unaBanda) criterios
