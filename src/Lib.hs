@@ -73,4 +73,41 @@ tocar :: Banda->Festival->Festival
 tocar unaBanda unFestival = (genero unaBanda) unFestival
 
 
+--2)
 
+bandaLoca = Banda ["original"] 100 trashMetal
+
+--3)
+
+generoTheStokes :: Genero
+generoTheStokes = pop.heavyMetal
+
+theStokes = Banda ["suicidio asistido","emocional","linda"] 45 generoTheStokes
+
+--4)
+
+suceder :: Festival->Festival
+suceder unFestival = foldr ($) unFestival (map (genero) (bandas unFestival))
+
+--5)
+type Criterio = Banda->Bool
+
+tieneMasDeTresDescripciones :: Banda->Bool
+tieneMasDeTresDescripciones  = (>3).length.descripcion
+
+tieneComoDescripcion :: Descripcion->Banda->Bool
+tieneComoDescripcion unaDescripcion = (elem unaDescripcion).descripcion
+
+tocaTantosDecibeles :: Decibeles->Banda->Bool
+tocaTantosDecibeles unosDecibeles = (>unosDecibeles).decibeles
+
+criterioVendida :: Criterio
+criterioVendida unaBanda = tieneComoDescripcion "vendida" unaBanda || tieneMasDeTresDescripciones unaBanda
+
+criterioAcustica :: Criterio
+criterioAcustica = tocaTantosDecibeles 55 
+
+criterioLegendaria :: Criterio 
+criterioLegendaria unaBanda = tieneComoDescripcion "legendaria" unaBanda && tocaTantosDecibeles 40 unaBanda
+
+--5)
