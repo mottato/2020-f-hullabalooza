@@ -43,7 +43,7 @@ aumentarPublicoMetal = modificarCantidadPublico (\cantidad->cantidad+(1*cantidad
 
 --Generos
 rockNacional :: Genero
-rockNacional = modificarCantidadPublico(+100)
+rockNacional = modificarCantidadPublico (+100)
 
 pop :: Genero
 pop unFestival
@@ -87,7 +87,7 @@ theStrokes = Banda ["suicidio asistido","emocional","linda"] 45 generoTheStrokes
 --4)
 
 suceder :: Festival->Festival
-suceder unFestival = foldr ($) unFestival (map (genero) (bandas unFestival))
+suceder unFestival = foldl (flip tocar) unFestival (bandas unFestival)
 
 --5)
 type Criterio = Banda->Bool
@@ -135,3 +135,12 @@ buenFest :: Festival -> [Criterio]->Bool
 buenFest (Festival _ _ _ bandas) criterios = popularidadTotal bandas criterios < 1000 && esMasPopularQueLaOtra bandas criterios
 
 
+--8)
+{- Ambos conceptos fueron utiles para la resolucion ya que simplificaron las funciones, por ejemplo cuando se
+modelaron los generos de metal.
+-}
+
+--9)
+{-No, por ejemplo si la lista de clasificaciones fuera infinita, cuando se neceiste usar en el caso de 
+popularidad jamas se hubiera llegado a un resultado puesto que jamas se terminarian de aplicar a una banda
+-}
