@@ -8,7 +8,7 @@ type Descripcion = String
 type Decibeles = Int
 
 
-data Festival= Festival{
+data Festival= Festival {
     lugar :: Lugar,
     cantidadPublico :: CantidadPublico,
     estadoAnimo :: EstadoAnimo,
@@ -24,16 +24,16 @@ data Banda= Banda{
 type Genero = Festival->Festival
 
 modificarCantidadPublico :: (CantidadPublico->CantidadPublico)->Festival->Festival
-modificarCantidadPublico unaFuncion unFestival = Festival {
+modificarCantidadPublico unaFuncion unFestival = unFestival {
     cantidadPublico = unaFuncion.cantidadPublico $unFestival
 }
 
 nuevoEstadoDeAnimo :: (EstadoAnimo->EstadoAnimo)->Festival->Festival
-nuevoEstadoDeAnimo unaFuncion unFestival = Festival {
+nuevoEstadoDeAnimo unaFuncion unFestival = unFestival {
     estadoAnimo = unaFuncion.estadoAnimo $unFestival
 }
 efectoMetal :: EstadoAnimo->Festival->Festival
-efectoMetal unEstadoAnimo =aumentarPublicoMetal. nuevoEstadoDeAnimo (\[animo]-> [animo] ++  unEstadoAnimo)
+efectoMetal unEstadoAnimo =aumentarPublicoMetal. nuevoEstadoDeAnimo (\animo-> animo ++  unEstadoAnimo)
 
 cumpleEstadoAnimo :: EstadoAnimo->Festival->Bool
 cumpleEstadoAnimo unEstadoAnimo = (==unEstadoAnimo).estadoAnimo
@@ -53,13 +53,13 @@ pop unFestival
 
 type Metal = Genero
 heavyMetal :: Metal
-heavyMetal = efectoMetal "pesado" 
+heavyMetal = efectoMetal " pesado" 
 
 trashMetal :: Metal
-trashMetal = efectoMetal "basura"
+trashMetal = efectoMetal " basura"
 
 subgeneroMetal :: EstadoAnimo->Metal
-subgeneroMetal unEstadoAnimo = aumentarPublicoMetal.nuevoEstadoDeAnimo(\[animo]-> [animo] ++ unEstadoAnimo)
+subgeneroMetal unEstadoAnimo = aumentarPublicoMetal.nuevoEstadoDeAnimo(\animo-> animo ++ " " ++ unEstadoAnimo)
 
 
 --Modelado
