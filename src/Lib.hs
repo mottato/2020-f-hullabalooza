@@ -79,10 +79,10 @@ bandaLoca = Banda ["original"] 100 trashMetal
 
 --3)
 
-generoTheStokes :: Genero
-generoTheStokes = pop.heavyMetal
+generoTheStrokes :: Genero
+generoTheStrokes = pop.heavyMetal
 
-theStokes = Banda ["suicidio asistido","emocional","linda"] 45 generoTheStokes
+theStrokes = Banda ["suicidio asistido","emocional","linda"] 45 generoTheStrokes
 
 --4)
 
@@ -117,3 +117,21 @@ popularidad unaBanda  = (*100).length.(criteriosQueCumple unaBanda)
 
 criteriosQueCumple :: Banda->[Criterio]->[Criterio]
 criteriosQueCumple unaBanda criterios = filter (\criterio->criterio unaBanda) criterios
+
+--7)
+
+popularidadTotal :: [Banda]->[Criterio]->Puntos
+popularidadTotal bandas criterios =sum.map (flip popularidad criterios) $bandas
+
+esMasPopularQueLaOtra :: [Banda]->[Criterio]->Bool
+esMasPopularQueLaOtra [] _ =True
+esMasPopularQueLaOtra [unaBanda] _= True
+esMasPopularQueLaOtra (unaBanda:otraBanda:masBandas) criterios = esMasPopular unaBanda otraBanda criterios && esMasPopularQueLaOtra masBandas criterios
+
+esMasPopular :: Banda->Banda->[Criterio]->Bool
+esMasPopular unaBanda otraBanda criterios = popularidad unaBanda criterios > popularidad otraBanda criterios 
+
+buenFest :: Festival -> [Criterio]->Bool
+buenFest (Festival _ _ _ bandas) criterios = popularidadTotal bandas criterios < 1000 && esMasPopularQueLaOtra bandas criterios
+
+
